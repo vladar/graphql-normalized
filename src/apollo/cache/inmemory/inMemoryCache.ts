@@ -192,7 +192,11 @@ export class InMemoryCache extends ApolloCache<NormalizedCacheObject> {
   public write(options: Cache.WriteOptions): Reference | undefined {
     try {
       ++this.txCount;
-      return this.storeWriter.writeToStore(this.data, options);
+      if (options.result.__normalized) {
+        return this.storeWriter.writeToStoreNormalized(this.data, options)
+      } else {
+        return this.storeWriter.writeToStore(this.data, options);
+      }
     } finally {
       if (!--this.txCount && options.broadcast !== false) {
         this.broadcastWatches();

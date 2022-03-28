@@ -106,6 +106,25 @@ export class StoreWriter {
     private reader?: StoreReader,
   ) {}
 
+  public writeToStoreNormalized(store: NormalizedCache, {
+    query,
+    result,
+    dataId,
+    variables,
+    overwrite,
+  }: Cache.WriteOptions): Reference | undefined {
+    let ref: any = { __ref: dataId }
+
+    new Map(result.__normalized).forEach((storeObject, dataId) => {
+      // @ts-ignore
+      store.merge(dataId, storeObject);
+    });
+
+    store.retain(ref.__ref);
+
+    return ref;
+  }
+
   public writeToStore(store: NormalizedCache, {
     query,
     result,
@@ -167,7 +186,8 @@ export class StoreWriter {
         storeObject = applied;
       }
 
-      if (__DEV__ && !context.overwrite) {
+      // This is develop-only, skipping for benchmark's sanity
+      if (false && __DEV__ && !context.overwrite) {
         const fieldsWithSelectionSets: Record<string, true> = Object.create(null);
         fieldNodeSet.forEach(field => {
           if (field.selectionSet) {
