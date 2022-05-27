@@ -97,27 +97,54 @@ consistent and up-to-date when multiple queries fetch parts of the same data.
 What happens if we move data normalization to GraphQL execution (i.e. move it to the server)?
 How much does it affect the client performance?
 
+> **Note:** results below require additional verification, take them with a grain of salt.
+> They also represent a simple normalization scenario. Other scenarios may produce different results.
+
+### Apollo
+
 First results for Apollo are rather promising and warrant at least some additional research:
 
 ```
 Current cache
-100 items x 568 ops/sec ±12.83% (49 runs sampled)
-1000 items x 45.50 ops/sec ±22.58% (52 runs sampled)
-10000 items x 6.86 ops/sec ±31.48% (43 runs sampled)
+100 items x 761 ops/sec ±8.39% (59 runs sampled)
+1000 items x 77.85 ops/sec ±16.18% (55 runs sampled)
+10000 items x 8.41 ops/sec ±16.13% (43 runs sampled)
 
 Pre-normalized cache
-100 items x 7,246 ops/sec ±4.93% (58 runs sampled)
-1000 items x 1,516 ops/sec ±7.05% (57 runs sampled)
-10000 items x 65.74 ops/sec ±103.87% (53 runs sampled)
+100 items x 7,413 ops/sec ±5.61% (59 runs sampled)
+1000 items x 678 ops/sec ±124.59% (59 runs sampled)
+10000 items x 88.45 ops/sec ±107.65% (58 runs sampled)
 ```
 
-Relay benchmarks are TBD
+### Relay
+
+Relay seems to be less receptive to normalization but the difference is still significant (~130% faster)
+
+```
+Current cache
+100 items x 1,049 ops/sec ±6.25% (58 runs sampled)
+1000 items x 140 ops/sec ±3.27% (61 runs sampled)
+10000 items x 14.53 ops/sec ±3.33% (63 runs sampled)
+
+Pre-normalized cache
+100 items x 2,473 ops/sec ±3.69% (61 runs sampled)
+1000 items x 328 ops/sec ±4.29% (63 runs sampled)
+10000 items x 36.28 ops/sec ±4.67% (56 runs sampled)
+```
 
 ## Try it
 To run the benchmark, clone the repo install dependencies with `yarn install` and run:
 
+#### Apollo:
+
 ```shell
 yarn bench-apollo
+```
+
+#### Relay:
+
+```shell
+yarn bench-relay
 ```
 
 ## Caveats for Apollo
@@ -133,6 +160,6 @@ In general, this change moves some complexity off the main JS thread to the serv
 This project is an **early experiment** to evaluate the potential impact on performance of GraphQL clients. Future steps may include:
 
 - [ ] Do a sanity-check with some actual JS profile (numbers seem to be too good)
-- [ ] Add a separate benchmark for Relay
+- [x] Add a separate benchmark for Relay
 - [ ] Build a proof-of-concept GraphQL executor capable to produce normalized results (e.g. as a feature in [supermassive](https://github.com/microsoft/graphitation/tree/main/packages/supermassive))
 - [ ] Integrate it to a real-world project and explore the constraints of this approach

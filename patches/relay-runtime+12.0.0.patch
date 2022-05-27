@@ -1,0 +1,22 @@
+diff --git a/node_modules/relay-runtime/lib/store/RelayResponseNormalizer.js b/node_modules/relay-runtime/lib/store/RelayResponseNormalizer.js
+index 6969cdd..1f697cc 100644
+--- a/node_modules/relay-runtime/lib/store/RelayResponseNormalizer.js
++++ b/node_modules/relay-runtime/lib/store/RelayResponseNormalizer.js
+@@ -120,7 +120,16 @@ var RelayResponseNormalizer = /*#__PURE__*/function () {
+ 
+     !record ? process.env.NODE_ENV !== "production" ? invariant(false, 'RelayResponseNormalizer(): Expected root record `%s` to exist.', dataID) : invariant(false) : void 0;
+ 
+-    this._traverseSelections(node, record, data);
++    if (data.__normalized) {
++      this._recordSource._records = new Map(data.__normalized)
++
++      // Alternative (a bit slower):
++      // for (var [id, value] of data.__normalized) {
++      //   this._recordSource.set(id, value);
++      // }
++    } else {
++      this._traverseSelections(node, record, data);
++    }
+ 
+     return {
+       errors: null,

@@ -1,0 +1,8 @@
+type Query {
+  items: [Item!]!
+}
+
+type Item {
+  id: ID!
+  foo: String!
+}
