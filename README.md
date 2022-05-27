@@ -116,6 +116,8 @@ Pre-normalized cache
 10000 items x 88.45 ops/sec ±107.65% (58 runs sampled)
 ```
 
+[source code](https://github.com/vladar/graphql-normalized/commit/e2ed6ee41d6e748a9eff63b29d046aaa31a0b06f)
+
 ### Relay
 
 Relay seems to be less receptive to normalization but the difference is still significant (~130% faster)
@@ -131,6 +133,8 @@ Pre-normalized cache
 1000 items x 328 ops/sec ±4.29% (63 runs sampled)
 10000 items x 36.28 ops/sec ±4.67% (56 runs sampled)
 ```
+
+[source code](https://github.com/vladar/graphql-normalized/blob/master/patches/relay-runtime%2B12.0.0.patch)
 
 ## Try it
 To run the benchmark, clone the repo install dependencies with `yarn install` and run:
