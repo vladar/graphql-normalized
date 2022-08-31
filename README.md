@@ -118,6 +118,8 @@ Pre-normalized cache
 
 [source code](https://github.com/vladar/graphql-normalized/commit/e2ed6ee41d6e748a9eff63b29d046aaa31a0b06f)
 
+> Note after more research: the 10x result is due to the fact that we bypass not just normalization per-se, but also additional overhead introduced by Apollo "field policies" and optimism cache invalidation.
+
 ### Relay
 
 Relay seems to be less receptive to normalization but the difference is still significant (~130% faster)
